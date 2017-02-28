@@ -28,6 +28,7 @@ public class Square : MonoBehaviour {
 
     public void Create(float zRot, float zPos)
     {
+        transform.GetComponent<Renderer>().material.color = new Color(zPos, zPos/7, zPos/7);
         transform.localPosition = new Vector3(0, 0, zPos);
         transform.Rotate(0, 0, zRot);
         transform.localScale = new Vector3(0, 0, 1);

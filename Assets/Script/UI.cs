@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UI : MonoBehaviour {
     public GameObject Squares;
-    int speedBalance = 15;
+    public int speedBalance = 15;
     bool btnRight = false, btnLeft = false;
 	
 	// Update is called once per frame
@@ -16,14 +16,18 @@ public class UI : MonoBehaviour {
     {
         if (btnRight)
         {
-            Squares.GetComponent<Transform>().Rotate(0, 0, GameManager.speed * speedBalance);
+            Squares.GetComponent<Transform>().Rotate(0, 0, -GameManager.speed * speedBalance);
         }
         if (btnLeft)
         {
-            Squares.GetComponent<Transform>().Rotate(0, 0, -GameManager.speed * speedBalance);
+            Squares.GetComponent<Transform>().Rotate(0, 0, GameManager.speed * speedBalance);
         }
     }
 
+    public void BtnSpeed(float a)
+    {
+        GameManager.speed += a;
+    }
     public void BtnRightDown()
     {
         btnRight = true;

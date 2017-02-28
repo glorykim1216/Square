@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    public static float speed = 0.05f;
+    public static float speed = 0.08f;
     public Square[] square = new Square[5];
     public Sphere sphere;
     int squareCount = 0, rotCount = 0, rotRandom = 0;
-    float zPos = 0, zRot = 5;
-    bool direction; // 방향
+    float zPos = 0, zRot = 0;
+    bool directionRight; // 방향
+
+    enum State
+    {
+        Right,
+        Left
+    }
+
+    State state = State.Right;
+
     // Use this for initialization
     void Start() {
         //StartCoroutine(a());
@@ -26,37 +35,40 @@ public class GameManager : MonoBehaviour {
     {
         if (!square[squareCount].life)
         {
-            square[squareCount].Create(RotationSet(), PositionSet()); // 추가 - 색상 랜덤 (매개변수)
+            RotationSet();
+            PositionSet();
+            square[squareCount].Create(zRot, zPos); // 추가 - 색상 랜덤 (매개변수)
             sphere.PositionSet(zPos);
             rotCount++;
             squareCount++;
-            if (squareCount > 20)
+            if (squareCount > 21)
             {
                 squareCount = 0;
             }
         }
     }
 
-    public float RotationSet()
+    public void RotationSet()
     {
+        // 방향 바꾸기(-), 같은 방향으로 몇번 생성(랜덤)
         if (rotCount == rotRandom)
         {
-            zRot -= 5;
-            //zRot = -zRot;
+            directionRight = !(directionRight);
             rotCount = 0;
-            rotRandom = Random.Range(1, 6);
+            rotRandom = Random.Range(3, 20);
             Debug.Log(rotRandom);
         }
+        if (directionRight)
+        {
+            zRot += 3;
+        }
         else
-        zRot += 5;
-        // 방향 바꾸기(-), 같은 방향으로 몇번 생성(랜덤)
-        return zRot;
+            zRot -= 3;
     }
 
-    public float PositionSet()
+    public void PositionSet()
     {
         zPos -= 0.001f;
-        return zPos;
     }
 
     IEnumerator a() // 추가 - 속도(밸런스)
