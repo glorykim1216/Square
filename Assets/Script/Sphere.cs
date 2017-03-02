@@ -14,6 +14,7 @@ public class Sphere : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// 추가 - 계속 회전
+        // collider 확인
 	}
     public void PositionSet(float zPos)
     {

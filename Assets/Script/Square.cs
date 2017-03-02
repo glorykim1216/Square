@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Square : MonoBehaviour {
     public bool life = true;
+    Renderer myColor;
 
     // Use this for initialization
     void Start () {
-	}
+        myColor = transform.GetComponent<Renderer>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -26,13 +28,15 @@ public class Square : MonoBehaviour {
         }
     }
 
-    public void Create(float zRot, float zPos)
+    public void Create(float zRot, float zPos, Color _color)
     {
-        transform.GetComponent<Renderer>().material.color = new Color(zPos, zPos/7, zPos/7);
+        myColor.material.color = _color;
         transform.localPosition = new Vector3(0, 0, zPos);
-        transform.Rotate(0, 0, zRot);
+        transform.localRotation = Quaternion.Euler(0, 0, zRot);
+        //2017-03-02 transfor.Rotation(0,0,zRot); -> 가끔 씹힘
         transform.localScale = new Vector3(0, 0, 1);
         life = true;
+
     }
 
 }

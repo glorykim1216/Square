@@ -6,26 +6,19 @@ public class GameManager : MonoBehaviour {
     public static float speed = 0.08f;
     public Square[] square = new Square[5];
     public Sphere sphere;
-    int squareCount = 0, rotCount = 0, rotRandom = 0;
-    float zPos = 0, zRot = 0;
+    int squareCount = 0, rotCount = 0, rotRandom = 0, colorSwitchPre = 0, colorSwitchPost = 0, colorRandomCount = 7;
+    float zPos = 0, zRot = 45;
     bool directionRight; // 방향
-
-    enum State
-    {
-        Right,
-        Left
-    }
-
-    State state = State.Right;
+    Color _color;
 
     // Use this for initialization
     void Start() {
-        //StartCoroutine(a());
+
     }
 
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
         Reset();
 
 
@@ -35,9 +28,10 @@ public class GameManager : MonoBehaviour {
     {
         if (!square[squareCount].life)
         {
-            RotationSet();
-            PositionSet();
-            square[squareCount].Create(zRot, zPos); // 추가 - 색상 랜덤 (매개변수)
+            zRot = RotationSet(zRot);
+            zPos = PositionSet(zPos);
+            _color = ColorSet(squareCount);
+            square[squareCount].Create(zRot, zPos, _color); // 추가 - 색상 랜덤 (매개변수)
             sphere.PositionSet(zPos);
             rotCount++;
             squareCount++;
@@ -48,27 +42,88 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void RotationSet()
+    public float RotationSet(float zRot)
     {
         // 방향 바꾸기(-), 같은 방향으로 몇번 생성(랜덤)
         if (rotCount == rotRandom)
         {
             directionRight = !(directionRight);
             rotCount = 0;
-            rotRandom = Random.Range(3, 20);
-            Debug.Log(rotRandom);
+            rotRandom = Random.Range(3, 30);
+            //Debug.Log(rotRandom);
         }
+
         if (directionRight)
         {
-            zRot += 3;
+            zRot += 5;
         }
         else
-            zRot -= 3;
+            zRot -= 5;
+
+        return zRot;
+        //Debug.Log("zRot:"+zRot);
     }
 
-    public void PositionSet()
+    // square z값 설정
+    public float PositionSet(float zPos)
     {
-        zPos -= 0.001f;
+        return (zPos -= 0.001f);
+    }
+
+    // 색상 설정
+    public Color ColorSet(int squareCount)
+    {
+        int _count = squareCount % 6 + 2;   // color 밝기
+
+        colorRandomCount++;
+
+        if (colorRandomCount >= 7)
+        {
+            colorRandomCount = 0;
+
+            // switch에 들어갈 colorSwitchPost 구하기
+            while (true)
+            {
+                colorSwitchPost = Random.Range(0, 8);
+                if (colorSwitchPre == colorSwitchPost)
+                {
+                    continue;
+                }
+                break;
+            }
+            colorSwitchPre = colorSwitchPost;
+        }
+      
+        // 색상 선택
+        switch (colorSwitchPost)
+        {
+            case 0:
+                _color = new Color(_count / 7f, _count / 7f, _count / 7f);
+                break;
+            case 1:
+                _color = new Color(0, _count / 7f, _count / 7f);
+                break;
+            case 2:
+                _color = new Color(_count / 7f, 0, _count / 7f);
+                break;
+            case 3:
+                _color = new Color(_count / 7f, _count / 7f, 0);
+                break;
+            case 4:
+                _color = new Color(0, 0, _count / 7f);
+                break;
+            case 5:
+                _color = new Color(0, _count / 7f, 0);
+                break;
+            case 6:
+                _color = new Color(_count / 7f, 0, 0);
+                break;
+
+            default:    //case 7:
+                _color = new Color(1, 0, _count / 7f);
+                break;
+        }
+        return _color;
     }
 
     IEnumerator a() // 추가 - 속도(밸런스)
