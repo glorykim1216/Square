@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     public static float speed = 0.08f;
-    public Square[] square = new Square[5];
+    public Square[] square;
     public Sphere sphere;
     int squareCount = 0, rotCount = 0, rotRandom = 0, colorSwitchPre = 0, colorSwitchPost = 0, colorRandomCount = 7;
     float zPos = 0, zRot = 45;
@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
         Reset();
-
-
     }
 
     public void Reset()
@@ -42,9 +40,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    //각도 설정
     public float RotationSet(float zRot)
     {
-        // 방향 바꾸기(-), 같은 방향으로 몇번 생성(랜덤)
         if (rotCount == rotRandom)
         {
             directionRight = !(directionRight);
@@ -64,7 +62,7 @@ public class GameManager : MonoBehaviour {
         //Debug.Log("zRot:"+zRot);
     }
 
-    // square z값 설정
+    // square pos z값 설정
     public float PositionSet(float zPos)
     {
         return (zPos -= 0.001f);
