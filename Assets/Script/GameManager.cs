@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    public static float speed = 0.08f;
+    public static float speed = 0.1f;
+    public static bool gameOver = false;
     public Square[] square;
-    public Sphere sphere;
+
     int squareCount = 0, rotCount = 0, rotRandom = 0, colorSwitchPre = 0, colorSwitchPost = 0, colorRandomCount = 7;
-    float zPos = 0, zRot = 45;
+    float zPos = 18, zRot = 45;
+    int depth=18;
     bool directionRight; // 방향
     Color _color;
 
@@ -19,7 +21,10 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate() {
-        Reset();
+        if (gameOver == false)
+        {
+            Reset();
+        }
     }
 
     public void Reset()
@@ -27,13 +32,12 @@ public class GameManager : MonoBehaviour {
         if (!square[squareCount].life)
         {
             zRot = RotationSet(zRot);
-            zPos = PositionSet(zPos);
             _color = ColorSet(squareCount);
-            square[squareCount].Create(zRot, zPos, _color); // 추가 - 색상 랜덤 (매개변수)
-            sphere.PositionSet(zPos);
+            square[squareCount].Create(zRot, depth++, _color); 
+
             rotCount++;
             squareCount++;
-            if (squareCount > 21)
+            if (squareCount > 17)
             {
                 squareCount = 0;
             }
@@ -48,30 +52,22 @@ public class GameManager : MonoBehaviour {
             directionRight = !(directionRight);
             rotCount = 0;
             rotRandom = Random.Range(3, 30);
-            //Debug.Log(rotRandom);
         }
 
         if (directionRight)
         {
-            zRot += 5;
+            zRot += 15;
         }
         else
-            zRot -= 5;
+            zRot -= 15;
 
         return zRot;
-        //Debug.Log("zRot:"+zRot);
-    }
-
-    // square pos z값 설정
-    public float PositionSet(float zPos)
-    {
-        return (zPos -= 0.001f);
     }
 
     // 색상 설정
     public Color ColorSet(int squareCount)
     {
-        int _count = squareCount % 6 + 2;   // color 밝기
+        int _count = squareCount % 5 + 3;   // color 밝기
 
         colorRandomCount++;
 

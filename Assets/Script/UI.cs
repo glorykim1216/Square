@@ -4,28 +4,40 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UI : MonoBehaviour {
-    public GameObject Squares;
+    public GameObject SquaresObj, PlayerObj;
+    Transform squaresTransform, playerTransform;
+
     public int speedBalance = 15;
     bool btnRight = false, btnLeft = false;
 
-    public Text timeText1, timeText2;
+    public Text timeText1, timeText2, timeText3;
     float time, bestScore;
     int scoreS, scoreM;
+    void Start()
+    {
+        squaresTransform = SquaresObj.GetComponent<Transform>();
+        playerTransform = PlayerObj.GetComponent<Transform>();
+    }
 	// Update is called once per frame
 	void Update () {
-        SquaresRotation();
-        Score();
-        // 추가 - 점수(시간초)
+        if (GameManager.gameOver == false)
+        {
+            SquaresRotation();
+        }
+        //Score();
+        // 추가 - 점수(시간초), 시작화면(페이드 인-아웃)
     }
     public void SquaresRotation()
     {
         if (btnRight)
         {
-            Squares.GetComponent<Transform>().Rotate(0, 0, -GameManager.speed * speedBalance);
+            squaresTransform.Rotate(0, 0, -GameManager.speed * speedBalance);
+            playerTransform.Rotate(0, 0, -GameManager.speed * speedBalance);
         }
-        if (btnLeft)
+        else if (btnLeft)
         {
-            Squares.GetComponent<Transform>().Rotate(0, 0, GameManager.speed * speedBalance);
+            squaresTransform.Rotate(0, 0, GameManager.speed * speedBalance);
+            playerTransform.Rotate(0, 0, GameManager.speed * speedBalance);
         }
     }
 
@@ -42,11 +54,12 @@ public class UI : MonoBehaviour {
         {
             scoreM = 0;
         }
-        scoreM += 2;
-        timeText1.text = scoreS.ToString().PadLeft(2, '0');
+        scoreS =(int)time;
+        scoreM = (int)(time * 100 - (int)time * 100);
+        timeText1.text = scoreS.ToString().PadLeft(2, '0');  
+
         timeText2.text = scoreM.ToString().PadLeft(2, '0');
-        //http://www.csharpstudy.com/Tip/Tip-number-format.aspx
-        //http://pullthelever.tistory.com/339
+        timeText3.text = time.ToString("F").PadLeft(2, '0');
     }
 
     public void BtnRightDown()
