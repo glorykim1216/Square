@@ -2,29 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class UI : MonoBehaviour {
-    public GameObject SquaresObj, PlayerObj;
+    public GameObject SquaresObj, PlayerObj, GameOverObj;
     Transform squaresTransform, playerTransform;
 
     public int speedBalance = 15;
-    bool btnRight = false, btnLeft = false;
+    bool btnRight = false, btnLeft = false, end = true;
 
-    public Text timeText1, timeText2, timeText3;
-    float time, bestScore;
+    public Text scoreS_Text, scoreM_Text, bestScore_Text;
+    float time = 0, bestScore;
     int scoreS, scoreM;
+
+    public Image gameOverBG;
+    Color alpha = new Vector4(0, 0, 0, 0.05f);
     void Start()
     {
         squaresTransform = SquaresObj.GetComponent<Transform>();
         playerTransform = PlayerObj.GetComponent<Transform>();
+               
     }
 	// Update is called once per frame
 	void Update () {
         if (GameManager.gameOver == false)
         {
             SquaresRotation();
+            Score();
         }
-        //Score();
+        else
+        {
+            if (end == true)
+            {
+                End();
+            }
+        }
         // 추가 - 점수(시간초), 시작화면(페이드 인-아웃)
     }
     public void SquaresRotation()
@@ -56,10 +67,42 @@ public class UI : MonoBehaviour {
         }
         scoreS =(int)time;
         scoreM = (int)(time * 100 - (int)time * 100);
-        timeText1.text = scoreS.ToString().PadLeft(2, '0');  
+        scoreS_Text.text = scoreS.ToString();
+        scoreM_Text.text = scoreM.ToString();//.PadLeft(2, '0');
+        bestScore_Text.text = time.ToString();
+    }
+    void End()
+    {
+        StartCoroutine(Alpha());
+        
+        bestScore = PlayerPrefs.GetFloat("bestScore", bestScore);
+        if (time > bestScore)
+        {
+            bestScore = time;
+        }
 
-        timeText2.text = scoreM.ToString().PadLeft(2, '0');
-        timeText3.text = time.ToString("F").PadLeft(2, '0');
+        bestScore_Text.text = "BEST SCORE : " + Mathf.Floor(bestScore*100)/100; // 소수 2자리까지
+        
+        PlayerPrefs.SetFloat("bestScore", bestScore);
+        PlayerPrefs.Save();
+
+        GameOverObj.SetActive(true);
+
+        end = false;
+    }
+
+    IEnumerator Alpha()
+    {
+        while (gameOverBG.color.a < 0.83f)
+        {
+            gameOverBG.color += alpha;
+            yield return 0;
+        }
+    }
+
+    public void ReGame()
+    {
+        SceneManager.LoadScene("start");
     }
 
     public void BtnRightDown()

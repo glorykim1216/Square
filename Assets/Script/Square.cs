@@ -9,7 +9,6 @@ public class Square : MonoBehaviour {
     // Use this for initialization
     void Start () {
         color_sortOrder = transform.GetComponent<Renderer>();
-
     }
 	
 	// Update is called once per frame
@@ -26,7 +25,7 @@ public class Square : MonoBehaviour {
         {
             size.x = GameManager.speed;
             size.y = GameManager.speed;
-            transform.localScale += size;// new Vector3(GameManager.speed, GameManager.speed, 0);
+            transform.localScale += size;
             if (transform.localScale.x > 18)
             {
                 life = false;
@@ -41,7 +40,7 @@ public class Square : MonoBehaviour {
         transform.localRotation = Quaternion.Euler(0, 0, zRot);
         //2017-03-02 transfor.Rotation(0,0,zRot); -> 가끔 씹힘
         color_sortOrder.sortingOrder = zPos;
-        transform.localScale = sizeReset;// new Vector3(0, 0, 1);
+        transform.localScale = sizeReset;
         life = true;
 
     }

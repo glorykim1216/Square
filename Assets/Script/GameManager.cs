@@ -12,10 +12,11 @@ public class GameManager : MonoBehaviour {
     int depth=18;
     bool directionRight; // 방향
     Color _color;
-
+    Player p;
     // Use this for initialization
     void Start() {
-
+        gameOver = false;
+        speed = 0.1f;
     }
 
 
