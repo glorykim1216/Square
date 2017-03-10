@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     public static float speed = 0.1f;
     public static bool gameOver = false;
     public Square[] square;
@@ -13,14 +14,12 @@ public class GameManager : MonoBehaviour {
     bool directionRight; // 방향
     Color _color;
     Player p;
-    // Use this for initialization
+
     void Start() {
         gameOver = false;
         speed = 0.1f;
     }
 
-
-    // Update is called once per frame
     void FixedUpdate() {
         if (gameOver == false)
         {
@@ -28,7 +27,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void Reset()
+    void Reset()
     {
         if (!square[squareCount].life)
         {
@@ -46,7 +45,7 @@ public class GameManager : MonoBehaviour {
     }
 
     //각도 설정
-    public float RotationSet(float zRot)
+    float RotationSet(float zRot)
     {
         if (rotCount == rotRandom)
         {
@@ -66,7 +65,7 @@ public class GameManager : MonoBehaviour {
     }
 
     // 색상 설정
-    public Color ColorSet(int squareCount)
+    Color ColorSet(int squareCount)
     {
         int _count = squareCount % 5 + 3;   // color 밝기
 
