@@ -13,7 +13,7 @@ public class UI : MonoBehaviour
 
     public Text scoreS_Text, scoreM_Text, bestScore_Text;
     float time = 0, bestScore;
-    int scoreS, scoreM, speedCheck = 5;
+    int scoreS, scoreM, speedCheck = 3;
 
     public Image gameOverBG;
     Color alpha = new Vector4(0, 0, 0, 0.05f);
@@ -47,12 +47,12 @@ public class UI : MonoBehaviour
         if (btnRight)
         {
             squaresTransform.Rotate(0, 0, -GameManager.speed * speedBalance);
-            playerTransform.Rotate(0, 0, -GameManager.speed * speedBalance);
+            playerTransform.Rotate(0, 0, -GameManager.speed * speedBalance*2);
         }
         else if (btnLeft)
         {
             squaresTransform.Rotate(0, 0, GameManager.speed * speedBalance);
-            playerTransform.Rotate(0, 0, GameManager.speed * speedBalance);
+            playerTransform.Rotate(0, 0, GameManager.speed * speedBalance*2);
         }
     }
 
@@ -60,15 +60,12 @@ public class UI : MonoBehaviour
     void Score()
     {
         time += Time.deltaTime;
-        scoreS = (int)time;
-        if (scoreM > 95)
-        {
-            scoreM = 0;
-        }
+
         scoreS = (int)time;
         scoreM = (int)(time * 100 - (int)time * 100);
+
         scoreS_Text.text = scoreS.ToString();
-        scoreM_Text.text = scoreM.ToString();
+        scoreM_Text.text = scoreM.ToString("D2");
         bestScore_Text.text = time.ToString();
     }
 
@@ -84,6 +81,19 @@ public class UI : MonoBehaviour
     void End()
     {
         StartCoroutine(Alpha());
+
+       
+    }
+
+    IEnumerator Alpha()
+    {
+        yield return new WaitForSeconds(0.4f);
+
+        while (gameOverBG.color.a < 0.83f)
+        {
+            gameOverBG.color += alpha;
+            yield return 0;
+        }
 
         bestScore = PlayerPrefs.GetFloat("bestScore", bestScore);
         if (time > bestScore)
@@ -101,25 +111,13 @@ public class UI : MonoBehaviour
         end = false;
     }
 
-    IEnumerator Alpha()
-    {
-        while (gameOverBG.color.a < 0.83f)
-        {
-            gameOverBG.color += alpha;
-            yield return 0;
-        }
-    }
-
     public void ReGame()
     {
         SceneManager.LoadScene("start");
     }
 
     // Button
-    public void BtnSpeed(float a)
-    {
-        GameManager.speed += a;
-    }
+
     public void BtnRightDown()
     {
         btnRight = true;

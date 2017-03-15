@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public GameObject particleCircle;
+    public AudioClip dieSound;
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("square")) //.tag. CompareTag() "square")
@@ -18,6 +19,6 @@ public class Player : MonoBehaviour
     void SoundDie()
     {
         particleCircle.SetActive(true);
-        GetComponent<AudioSource>().Play();
+        GetComponent<AudioSource>().PlayOneShot(dieSound);
     }
 }

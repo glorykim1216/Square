@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static float speed = 0.1f;
-    public static bool gameOver = false;
+    public static float speed;
+    public static bool gameOver;
     public Square[] square;
 
     int squareCount = 0, rotCount = 0, rotRandom = 0, colorSwitchPre = 0, colorSwitchPost = 0, colorRandomCount = 7;
@@ -13,11 +13,10 @@ public class GameManager : MonoBehaviour
     int depth=18;
     bool directionRight; // 방향
     Color _color;
-    Player p;
 
     void Start() {
         gameOver = false;
-        speed = 0.1f;
+        speed = 0.06f;
     }
 
     void FixedUpdate() {
@@ -118,11 +117,5 @@ public class GameManager : MonoBehaviour
                 break;
         }
         return _color;
-    }
-
-    IEnumerator a() // 추가 - 속도(밸런스)
-    {
-        yield return new WaitForSeconds(2);
-        speed += 0.02f;
     }
 }

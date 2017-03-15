@@ -16,10 +16,10 @@ public class start : MonoBehaviour
 
     void Update()
     {
-        if (effectSize.localScale.x < 13)
+        if (effectSize.localScale.x < 18)
         {
             effectSize.localScale += size;
-            if (effectSize.localScale.x > 13)
+            if (effectSize.localScale.x > 18)
             {
                 playBtn.SetActive(true);
             }
