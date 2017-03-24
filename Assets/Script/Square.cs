@@ -43,5 +43,4 @@ public class Square : MonoBehaviour
         life = true;
 
     }
-
 }

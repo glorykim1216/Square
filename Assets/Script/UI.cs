@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Advertisements;
 public class UI : MonoBehaviour
 {
-    public GameObject SquaresObj, PlayerObj, GameOverObj;
+    public GameObject SquaresObj, PlayerObj, GameOverObj, GM;
     Transform squaresTransform, playerTransform;
 
     public int speedBalance = 15;
@@ -16,7 +17,16 @@ public class UI : MonoBehaviour
     int scoreS, scoreM, speedCheck = 3;
 
     public Image gameOverBG;
-    Color alpha = new Vector4(0, 0, 0, 0.05f);
+    Color alpha = new Vector4(0, 0, 0, 0.03f);
+    ShowOptions _ShowOpt = new ShowOptions();
+
+
+    void Awake()
+    {
+        Advertisement.Initialize("1358761", false);
+        _ShowOpt.resultCallback = OnAdsShowResultCallBack;
+    }
+
 
     void Start()
     {
@@ -81,19 +91,13 @@ public class UI : MonoBehaviour
     void End()
     {
         StartCoroutine(Alpha());
-
-       
     }
 
     IEnumerator Alpha()
     {
-        yield return new WaitForSeconds(0.4f);
-
-        while (gameOverBG.color.a < 0.83f)
-        {
-            gameOverBG.color += alpha;
-            yield return 0;
-        }
+        end = false;
+        yield return new WaitForSeconds(0.5f);
+     
 
         bestScore = PlayerPrefs.GetFloat("bestScore", bestScore);
         if (time > bestScore)
@@ -108,14 +112,35 @@ public class UI : MonoBehaviour
 
         GameOverObj.SetActive(true);
 
-        end = false;
+        gameOverBG.color = alpha;
+        while (gameOverBG.color.a < 0.86f)
+        {
+            gameOverBG.color += alpha;
+            yield return 0;
+        }
+
+
     }
 
-    public void ReGame()
+    void OnAdsShowResultCallBack(ShowResult result)
+    {
+        // ReGame
+        squaresTransform.rotation = Quaternion.Euler(0, 0, 0);
+        GM.GetComponent<GameManager>().ReGame();
+        GameOverObj.SetActive(false);
+        GameManager.speed *= 0.8f;
+        GameManager.gameOver = false;
+        end = true;
+    }
+
+    public void OnBtnUnityAds()
+    {
+        Advertisement.Show(null, _ShowOpt);
+    }
+    public void Lobby()
     {
         SceneManager.LoadScene("start");
     }
-
     // Button
 
     public void BtnRightDown()

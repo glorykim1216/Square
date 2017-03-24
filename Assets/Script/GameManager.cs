@@ -118,4 +118,13 @@ public class GameManager : MonoBehaviour
         }
         return _color;
     }
+
+   public void ReGame()
+    {
+        for(int i = 0; i < 18; i++)
+        {
+            square[i].GetComponent<Transform>().rotation = Quaternion.Euler(0, 0, 45);
+        }
+            zRot = 45;
+    }
 }

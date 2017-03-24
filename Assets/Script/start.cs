@@ -31,4 +31,3 @@ public class start : MonoBehaviour
         SceneManager.LoadScene("square");
     }
 }
-// 눈->네모, 노래 60초, 파티클(크기조절,색변경) 끝나고 화면 어두워짐
